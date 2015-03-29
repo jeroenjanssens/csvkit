@@ -31,7 +31,7 @@ The header line is required though the columns may be in any order::
       -f FORMAT, --format FORMAT
                             The format of the input file. If not specified will be
                             inferred from the file type. Supported formats: csv,
-                            dbf, fixed, geojson, json, xls, xlsx.
+                            dbf, fixed, geojson, json, ndjson, xls, xlsx.
       -s SCHEMA, --schema SCHEMA
                             Specifies a CSV-formatted schema file for converting
                             fixed-width files. See documentation for details.
@@ -43,7 +43,15 @@ The header line is required though the columns may be in any order::
       --sheet SHEET         The name of the XLSX sheet to operate on.
       --no-inference        Disable type inference when parsing the input.
 
-Also see: :doc:`common_arguments`.
+See also: :doc:`../common_arguments`.
+
+.. note::
+
+    The "ndjson" format refers to "newline delimited JSON", such as is output by the many streaming APIs.
+
+.. note::
+
+    DBF format is only supported when running on Python 2.
 
 Examples
 ========
@@ -69,7 +77,6 @@ Standardize the formatting of a CSV file (quoting, line endings, etc.)::
 Fetch csvkit's open issues from the Github API, convert the JSON response into a CSV and write it to a file::
 
     $ curl https://api.github.com/repos/onyxfish/csvkit/issues?state=open | in2csv -f json -v > issues.csv 
-
 Convert a DBase DBF file to an equivalent CSV::
 
     $ in2csv examples/testdbf.dbf > testdbf_converted.csv

@@ -7,156 +7,69 @@ About
 
 .. include:: ../README
 
-Principles
-==========
+Why csvkit?
+===========
 
-csvkit is to tabular data what the standard Unix text processing suite (grep, sed, cut, sort) is to text. As such, csvkit adheres to `the Unix philosophy <http://en.wikipedia.org/wiki/Unix_philosophy>`_.
+Because it makes your life easier.
 
-#. Small is beautiful.
-#. Make each program do one thing well.
-#. Build a prototype as soon as possible.
-#. Choose portability over efficiency.
-#. Store data in flat text files.
-#. Use software leverage to your advantage.
-#. Use shell scripts to increase leverage and portability.
-#. Avoid captive user interfaces.
-#. Make every program a filter.
+Convert Excel to CSV::
 
-As there is no formally defined CSV format, csvkit encourages well-known formatting standards:
+    in2csv data.xls > data.csv
 
-* Output favors compatability with the widest range of applications. This means that quoting is done with double-quotes and only when necessary, columns are separated with commas, and lines are terminated with unix style line endings ("\\n").
+Convert JSON to CSV::
 
-* Data that is modified or generated will prefer consistency over brevity. Floats always include at least one decimal place, even if they are round. Dates and times are written in ISO8601 format.
+    in2csv data.json > data.csv
 
-Installation
-============
+Print column names::
 
-Users
------
+    csvcut -n data.csv
 
-If you only want to use csvkit, install it this way::
+Select a subset of columns::
 
-    pip install csvkit
+    csvcut -c column_a,column_c data.csv > new.csv
 
-If you are installing on Ubuntu you may need to install the Python development headers prior to install csvkit::
+Reorder columns::
 
-    sudo apt-get install python-dev python-pip python-setuptools build-essential
+    csvcut -c column_c,column_a data.csv > new.csv
 
-If the installation appears to be successful but running the tools fails, try updating your version of Python setuptools:
+Find rows with matching ells::
 
-    pip install setuptools --upgrade
-    pip install csvkit --upgrade
+    csvgrep -c phone_number -r 555-555-\d{4}" data.csv > matching.csv
 
-.. note::
+Convert to JSON::
 
-    csvkit is routinely tested on OSX, somewhat less frequently on Linux and once in a while on Windows. All platforms are supported. It is tested against Python 2.6, 2.7 and PyPy. Neither Python < 2.6 nor Python >= 3.0 are supported at this time.
+    csvjson data.csv > data.json
 
-Developers
-----------
+Generate summary statistics::
 
-If you are a developer that also wants to hack on csvkit, install it this way::
+    csvstat data.csv
 
-    git clone git://github.com/onyxfish/csvkit.git
-    cd csvkit
-    mkvirtualenv --no-site-packages csvkit
-    pip install -r requirements.txt
-    python setup.py develop
-    nosetests
+Query with SQL::
 
-.. note::
+    csvsql --query "select name from data where age > 30" data.csv > old_folks.csv
 
-    If you have a recent version of pip, you may need to run pip with the additional arguments :code:`--allow-external argparse`.
+Import into PostgreSQL::
+
+    csvsql --db postgresql:///database --insert data.csv 
+
+Extract data from PostgreSQL:::
+
+    sql2csv --db postgresql:///database --query "select * from data" > extract.csv
+
+And much more...
+
+Table of contents
+=================
+
+.. toctree::
+    :maxdepth: 3 
     
-Tutorial
-========
-
-The csvkit tutorial walks through processing and analyzing a real dataset from `data.gov <http://data.gov>`_. It is divided into several parts for easier reading:
-
-.. toctree::
-    :maxdepth: 2 
-    :numbered:
-
-    tutorial/getting_started
-    tutorial/examining_the_data
-    tutorial/adding_another_year
-    tutorial/wrapping_up
-
-Usage
-=====
-
-csvkit is comprised of a number of individual command line utilities that be loosely divided into a few major categories: Input, Processing, and Output. Documentation and examples for each utility are described on the following pages.
-
-*Input*
-
-.. toctree::
-    :maxdepth: 1 
-
-    scripts/in2csv
-    scripts/sql2csv
-
-*Processing*
-
-.. toctree::
-    :maxdepth: 1 
-
-    scripts/csvclean
-    scripts/csvcut
-    scripts/csvgrep
-    scripts/csvjoin
-    scripts/csvsort
-    scripts/csvstack
-
-*Output (and Analysis)*
-   
-.. toctree::
-    :maxdepth: 1 
-
-    scripts/csvjson
-    scripts/csvlook
-    scripts/csvpy
-    scripts/csvsql
-    scripts/csvstat
-
-*Appendices*
-
-.. toctree::
-    :maxdepth: 1 
-
-    scripts/common_arguments
-
-Using as a library
-==================
-
-csvkit is designed to be used a replacement for most of Python's :mod:`csv` module. Important parts of the API are documented on the following pages.
-
-Don't!
-
-::
-
-    import csv
-
-Do!
-
-::
-
-    import csvkit
-
-.. toctree::
-    :maxdepth: 1
-
-    api/csvkit
-    api/csvkit.unicsv
-    api/csvkit.sniffer
-
-Contributing
-============
-
-Want to hack on csvkit? Here's how:
-
-.. toctree::
-    :maxdepth: 2
-
+    install
+    tutorial
+    cli 
+    lib
     contributing
+    release 
 
 Authors
 =======

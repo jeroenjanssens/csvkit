@@ -5,17 +5,23 @@ from setuptools import setup
 
 install_requires = [
     'xlrd>=0.7.1',
-    'python-dateutil>=1.5',
     'sqlalchemy>=0.6.6',
-    'openpyxl>=1.5.7',
-    'dbf==0.94.003']
+    'openpyxl>=2.0.3',
+    'six>=1.6.1',
+    'python-dateutil==2.2'
+]
 
 if sys.version_info < (2, 7):
     install_requires.append('argparse>=1.2.1')
+    install_requires.append('ordereddict>=1.1')
+    install_requires.append('simplejson>=3.6.3')
+
+if sys.version_info[0] == 2:
+    install_requires.append('dbf==0.94.003')
 
 setup(
     name='csvkit',
-    version='0.7.3',
+    version='1.0.0',
     description='A library of utilities for working with CSV, the king of tabular file formats.',
     long_description=open('README').read(),
     author='Christopher Groskopf',
@@ -23,7 +29,7 @@ setup(
     url='http://csvkit.rtfd.org/',
     license='MIT',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'Intended Audience :: End Users/Desktop',
@@ -33,6 +39,11 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities'
@@ -46,6 +57,7 @@ setup(
         'console_scripts': [
             'csvclean = csvkit.utilities.csvclean:launch_new_instance',
             'csvcut = csvkit.utilities.csvcut:launch_new_instance',
+            'csvformat = csvkit.utilities.csvformat:launch_new_instance',
             'csvgrep = csvkit.utilities.csvgrep:launch_new_instance',
             'csvjoin = csvkit.utilities.csvjoin:launch_new_instance',
             'csvjson = csvkit.utilities.csvjson:launch_new_instance',

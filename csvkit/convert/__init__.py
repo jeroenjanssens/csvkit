@@ -1,14 +1,22 @@
 #!/usr/bin/env python
 
-from csvitself import csv2csv
-from dbase import dbf2csv
-from fixed import fixed2csv
-from geojs import geojson2csv
-from js import json2csv
-from xls import xls2csv
-from xlsx import xlsx2csv
+import six
 
-SUPPORTED_FORMATS = ['fixed', 'xls', 'xlsx', 'csv', 'json', 'geojson', 'dbf']
+from csvkit.convert.csvitself import csv2csv
+from csvkit.convert.fixed import fixed2csv
+from csvkit.convert.geojs import geojson2csv
+from csvkit.convert.js import json2csv
+from csvkit.convert.ndjs import ndjson2csv
+from csvkit.convert.xls import xls2csv
+from csvkit.convert.xlsx import xlsx2csv
+
+SUPPORTED_FORMATS = ['fixed', 'xls', 'xlsx', 'csv', 'json', 'geojson', 'ndjson']
+
+# DBF is supported for Python 2 only
+if six.PY2:
+    from csvkit.convert.dbase import dbf2csv
+
+    SUPPORTED_FORMATS.append('dbf')
 
 def convert(f, format, schema=None, key=None, **kwargs):
     """
@@ -31,11 +39,15 @@ def convert(f, format, schema=None, key=None, **kwargs):
         return xlsx2csv(f, **kwargs)
     elif format == 'json':
         return json2csv(f, key, **kwargs)
+    elif format == 'ndjson':
+        return ndjson2csv(f, **kwargs)
     elif format == 'geojson':
         return geojson2csv(f, **kwargs)
     elif format == 'csv':
         return csv2csv(f, **kwargs)
     elif format == 'dbf':
+        if six.PY3:
+            raise ValueError('format "dbf" is not supported forthis version of Python.')
         return dbf2csv(f, **kwargs)
     else:
         raise ValueError('format "%s" is not supported' % format)

@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
+import itertools
+
+import six
+
 from csvkit import CSVKitReader
 from csvkit.cli import CSVKitUtility 
 from csvkit.headers import make_default_headers
-import itertools
 
 class CSVLook(CSVKitUtility):
     description = 'Render a CSV file in the console as a fixed-width table.'
@@ -12,24 +15,20 @@ class CSVLook(CSVKitUtility):
         pass
 
     def main(self):
-        rows = CSVKitReader(self.args.file, **self.reader_kwargs)
-
-
+        rows = CSVKitReader(self.input_file, **self.reader_kwargs)
 
         # Make a default header row if none exists
         if self.args.no_header_row:
-            row = rows.next()
+            row = next(rows)
 
             column_names = make_default_headers(len(row))
 
             # Put the row back on top
             rows = itertools.chain([row], rows)
         else:
-            column_names = rows.next()
+            column_names = next(rows)
 
         column_names = list(column_names)
-
-
 
         # prepend 'line_number' column with line numbers if --linenumbers option
         if self.args.line_numbers:
@@ -42,8 +41,6 @@ class CSVLook(CSVKitUtility):
 
         # Insert the column names at the top
         rows.insert(0, column_names)
-
-
 
         widths = []
 
@@ -67,9 +64,9 @@ class CSVLook(CSVKitUtility):
             for j, d in enumerate(row):
                 if d is None:
                     d = ''
-                output.append(' %s ' % unicode(d).ljust(widths[j]))
+                output.append(' %s ' % six.text_type(d).ljust(widths[j]))
 
-            self.output_file.write(('| %s |\n' % ('|'.join(output))).encode('utf-8'))
+            self.output_file.write('| %s |\n' % ('|'.join(output)))
 
             if (i == 0 or i == len(rows) - 1):
                 self.output_file.write('%s\n' % divider)

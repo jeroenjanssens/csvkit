@@ -37,8 +37,10 @@ Converts a CSV file into JSON or GeoJSON (depending on flags)::
       --crs CRS             A coordinate reference system string to be included
                             with GeoJSON output. Only valid if --lat and --lon are
                             also specified.
+      --stream              Output JSON as a stream of newline-separated objects,
+                            rather than an as an array.
 
-Also see: :doc:`common_arguments`.
+See also: :doc:`../common_arguments`.
 
 Examples
 ========

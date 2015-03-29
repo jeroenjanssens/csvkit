@@ -14,9 +14,9 @@ class SQL2CSV(CSVKitUtility):
     def add_arguments(self):
         self.argparser.add_argument('--db', dest='connection_string', default='sqlite://',
             help='An sqlalchemy connection string to connect to a database.',)
-        self.argparser.add_argument('file', metavar="FILE", nargs='?', type=FileType('rb'), default=sys.stdin,
+        self.argparser.add_argument('file', metavar="FILE", nargs='?', type=FileType('rt'), default=sys.stdin,
             help='The file to use as SQL query. If both FILE and QUERY are omitted, query will be read from STDIN.')
-        self.argparser.add_argument('-q', '--query', default=None,
+        self.argparser.add_argument('--query', default=None,
             help="The SQL query to execute. If specified, it overrides FILE and STDIN.")
         self.argparser.add_argument('-H', '--no-header-row', dest='no_header_row', action='store_true',
             help='Do not output column names.')
@@ -54,6 +54,7 @@ class SQL2CSV(CSVKitUtility):
 
         if not self.args.no_header_row:
             output.writerow(rows._metadata.keys)
+
         for row in rows:
             output.writerow(row)
 
